@@ -8,9 +8,7 @@ install() {
   # cf. <https://bugzilla.redhat.com/show_bug.cgi?id=955379>.
   # ln -s "$(pwd)"/"$1" /etc/systemd/system/
 
-  # Needed due to <https://github.com/systemd/systemd/issues/6308>.
-  # cp "$1" /etc/systemd/system/
-  sed "s\\__INSTALL_DIR__\\$(pwd)\\g" "$1" > /etc/systemd/system/"$1"
+  cp "$1" /etc/systemd/system/
 }
 
 for unit in \
