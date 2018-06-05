@@ -1,0 +1,7 @@
+[Unit]
+Description=docker-compose update timer "%f"
+StopWhenUnneeded=true
+
+[Timer]
+OnCalendar=*-*-* 00:02:00
+RandomizedDelaySec=1h

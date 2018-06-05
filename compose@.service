@@ -1,0 +1,21 @@
+[Unit]
+Description=docker-compose service "%f"
+Requires=compose-update@.timer
+
+[Service]
+WorkingDirectory=%f
+Restart=always
+Environment=COMPOSE_PROJECT_NAME=%i
+
+ExecStartPre=/usr/bin/env docker-compose pull
+ExecStartPre=/usr/bin/env docker-compose build --pull
+ExecStart=__INSTALL_DIR__/start
+
+ExecStop=/usr/bin/env docker-compose down
+
+ExecReload=/usr/bin/env docker-compose pull
+ExecReload=/usr/bin/env docker-compose build --pull
+ExecReload=/usr/bin/env kill -HUP "$MAINPID"
+
+[Install]
+WantedBy=multi-user.target

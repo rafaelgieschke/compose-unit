@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -eu
+cd "$(dirname "$0")"
+
+install() {
+  # The following does not currently work,
+  # cf. <https://bugzilla.redhat.com/show_bug.cgi?id=955379>.
+  # ln -s "$(pwd)"/"$1" /etc/systemd/system/
+
+  # Needed due to <https://github.com/systemd/systemd/issues/6308>.
+  # cp "$1" /etc/systemd/system/
+  sed "s\\__INSTALL_DIR__\\$(pwd)\\g" "$1" > /etc/systemd/system/"$1"
+}
+
+for unit in \
+  compose@.service \
+  compose-update@.timer \
+  compose-update@.service \
+; do
+  echo installing "$unit"
+  install "$unit"
+done
+
+echo installing compose
+cp compose /usr/bin/
+systemctl daemon-reload

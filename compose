@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+CMD="$1"
+shift
+DIR="$(readlink -f -- "$1")"
+shift
+
+if test "$CMD" = "journalctl"; then
+  exec journalctl -u compose@"$(systemd-escape -p "$DIR")" "$@"
+else
+  exec systemctl "$CMD" compose@"$(systemd-escape -p "$DIR")" "$@"
+fi

@@ -1,0 +1,6 @@
+[Unit]
+Description=docker-compose update service "%f"
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/env systemctl reload compose@%i.service

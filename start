@@ -1,0 +1,17 @@
+#!/bin/sh
+
+OLDPID=""
+
+reload() {
+  docker-compose up &
+  PID="$!"
+  if test -n "$OLDPID"; then
+    kill -HUP "$OLDPID"
+  fi
+  OLDPID="$PID"
+}
+
+trap "reload" HUP
+
+reload
+while ! wait; do :; done 
