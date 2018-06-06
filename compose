@@ -6,7 +6,10 @@ shift
 DIR="$(readlink -f -- "$1")"
 shift
 
-if test "$CMD" = "journalctl"; then
+if test "$CMD" = "docker"; then
+  cd "$DIR"
+  COMPOSE_PROJECT_NAME="$(systemd-escape -p "$DIR")" exec docker-compose "$@"
+elif test "$CMD" = "journalctl"; then
   exec journalctl -u compose@"$(systemd-escape -p "$DIR")" "$@"
 else
   exec systemctl "$CMD" compose@"$(systemd-escape -p "$DIR")" "$@"
