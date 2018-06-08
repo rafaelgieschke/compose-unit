@@ -11,7 +11,7 @@ ExecStartPre=/usr/bin/env docker-compose pull
 ExecStartPre=/usr/bin/env docker-compose build --pull
 ExecStart=/bin/sh -c 'trap "docker-compose up & kill -HUP %-" HUP; docker-compose up & while ! wait; do :; done'
 
-ExecStop=/usr/bin/env docker-compose down
+ExecStop=/usr/bin/env docker-compose stop
 
 ExecReload=/usr/bin/env docker-compose pull
 ExecReload=/usr/bin/env docker-compose build --pull
