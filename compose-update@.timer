@@ -1,6 +1,6 @@
 [Unit]
 Description=docker-compose update timer "%f"
-StopWhenUnneeded=true
+PartOf=compose@.service
 
 [Timer]
 OnCalendar=*-*-* 00:02:00
