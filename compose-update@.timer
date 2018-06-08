@@ -3,5 +3,5 @@ Description=docker-compose update timer "%f"
 PartOf=compose@.service
 
 [Timer]
-OnCalendar=*-*-* 00:02:00
+OnCalendar=*-*-* 02:00:00
 RandomizedDelaySec=1h
