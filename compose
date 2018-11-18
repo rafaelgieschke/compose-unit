@@ -3,9 +3,24 @@ set -eu
 
 CMD="$1"
 shift
-DIR="$(readlink -f -- "$1")"
-shift
 
+DIR=""
+for i in $(seq 1 "$#"); do
+  OPT="$1"
+  shift
+  case "$OPT" in
+    "-"*)
+      set -- "$@" "$OPT";;
+    *)
+      if test -z "$DIR"; then
+        DIR="$OPT"
+      else
+        set -- "$@" "$OPT"
+      fi;;
+  esac
+done
+
+DIR="$(readlink -f -- "$DIR")"
 INSTANCE="$(systemd-escape -p "$DIR")"
 
 if test "$CMD" = "docker"; then
