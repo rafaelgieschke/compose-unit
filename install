@@ -3,6 +3,16 @@
 set -xeu
 cd "$(dirname "$0")"
 
-cp compose@.service compose-update@.timer compose-update@.service /etc/systemd/system/
-cp compose /usr/bin/
+cp "compose@.service" "compose-update@.timer" "compose-update@.service" /etc/systemd/system/
+DOCKER_COMPOSE="$(which docker-compose)"
+sed -i "/^Environment=DOCKER_COMPOSE/aEnvironment=DOCKER_COMPOSE=$DOCKER_COMPOSE" "/etc/systemd/system/compose@.service"
+
+TARGET="/usr/bin/"
+if test -d /opt/bin/; then
+  TARGET="/opt/bin/"
+elif test -d /usr/local/bin/; then
+  TARGET="/usr/local/bin/"
+fi
+
+cp compose "$TARGET"
 systemctl daemon-reload

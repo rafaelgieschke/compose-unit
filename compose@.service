@@ -6,15 +6,16 @@ Requires=compose-update@.timer
 WorkingDirectory=%f
 Restart=always
 Environment=COMPOSE_PROJECT_NAME=%i
+Environment=DOCKER_COMPOSE=docker-compose
 
-ExecStartPre=/usr/bin/env docker-compose pull
-ExecStartPre=/usr/bin/env docker-compose build --pull
-ExecStart=/bin/sh -c 'trap "docker-compose up & kill -HUP %-" HUP; docker-compose up & while ! wait; do :; done'
+ExecStartPre=/usr/bin/env "$DOCKER_COMPOSE" pull
+ExecStartPre=/usr/bin/env "$DOCKER_COMPOSE" build --pull
+ExecStart=/bin/sh -c 'trap ""$DOCKER_COMPOSE" up & kill -HUP %-" HUP; "$DOCKER_COMPOSE" up & while ! wait; do :; done'
 
-ExecStop=/usr/bin/env docker-compose stop
+ExecStop=/usr/bin/env "$DOCKER_COMPOSE" stop
 
-ExecReload=/usr/bin/env docker-compose pull
-ExecReload=/usr/bin/env docker-compose build --pull
+ExecReload=/usr/bin/env "$DOCKER_COMPOSE" pull
+ExecReload=/usr/bin/env "$DOCKER_COMPOSE" build --pull
 ExecReload=/usr/bin/env kill -HUP "$MAINPID"
 
 [Install]
