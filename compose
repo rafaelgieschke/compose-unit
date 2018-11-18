@@ -5,10 +5,21 @@ CMD="$1"
 shift
 
 DIR=""
-for i in $(seq 1 "$#"); do
+i="0"
+ii="$#"
+while test "$i" -lt "$ii"; do
   OPT="$1"
   shift
   case "$OPT" in
+    "--")
+      if test -z "$DIR"; then
+        i="$((i+1))"
+        OPT="$1"
+        shift
+        DIR="$OPT"
+      else
+        set -- "$@" "$OPT"
+      fi;;
     "-"*)
       set -- "$@" "$OPT";;
     *)
@@ -18,6 +29,7 @@ for i in $(seq 1 "$#"); do
         set -- "$@" "$OPT"
       fi;;
   esac
+  i="$((i+1))"
 done
 
 DIR="$(readlink -f -- "$DIR")"
