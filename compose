@@ -32,8 +32,12 @@ while test "$i" -lt "$ii"; do
   i="$((i+1))"
 done
 
-DIR="$(readlink -f -- "$DIR")"
-INSTANCE="$(systemd-escape -p "$DIR")"
+if test "$DIR"; then
+  DIR="$(readlink -f -- "$DIR")"
+  INSTANCE="$(systemd-escape -p "$DIR")"
+else
+  INSTANCE="*"
+fi
 
 if test "$CMD" = "docker"; then
   cd "$DIR"
