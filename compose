@@ -1,6 +1,8 @@
 #!/bin/sh
 set -eu
 
+DOCKER_COMPOSE="docker-compose"
+
 CMD="$1"
 shift
 
@@ -41,7 +43,7 @@ fi
 
 if test "$CMD" = "docker"; then
   cd "$DIR"
-  COMPOSE_PROJECT_NAME="$INSTANCE" exec docker-compose "$@"
+  COMPOSE_PROJECT_NAME="$INSTANCE" exec "$DOCKER_COMPOSE" "$@"
 elif test "$CMD" = "journalctl"; then
   exec journalctl -u compose@"$INSTANCE" "$@"
 else

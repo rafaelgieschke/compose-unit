@@ -15,4 +15,6 @@ elif test -d /usr/local/bin/; then
 fi
 
 cp compose "$TARGET"
+sed -i "s#^DOCKER_COMPOSE=.*#DOCKER_COMPOSE=\"$DOCKER_COMPOSE\"#" "$TARGET"/compose
+
 systemctl daemon-reload
