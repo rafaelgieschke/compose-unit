@@ -41,6 +41,13 @@ else
   INSTANCE="*"
 fi
 
+for cmd in config exec images ps top; do
+  if test "$CMD" = "$cmd"; then
+    set -- "$CMD" "$@"
+    CMD="docker"
+  fi
+done
+
 if test "$CMD" = "docker"; then
   cd "$DIR"
   set -x
