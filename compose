@@ -43,9 +43,12 @@ fi
 
 if test "$CMD" = "docker"; then
   cd "$DIR"
+  set -x
   COMPOSE_PROJECT_NAME="$INSTANCE" exec "$DOCKER_COMPOSE" "$@"
 elif test "$CMD" = "journalctl"; then
+  set -x
   exec journalctl -u compose@"$INSTANCE" "$@"
 else
+  set -x
   exec systemctl "$CMD" compose@"$INSTANCE" "$@"
 fi
