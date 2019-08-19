@@ -3,8 +3,14 @@ set -eu
 
 DOCKER_COMPOSE="docker-compose"
 
-CMD="$1"
-shift
+CMD="${1:-list-units}"
+
+case "$CMD" in
+  "-"*)
+    CMD="list-units";;
+  *)
+    shift || :;;
+esac
 
 DIR=""
 i="0"
