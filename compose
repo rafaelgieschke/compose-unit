@@ -14,7 +14,7 @@ case "$CMD" in
     fi;;
 esac
 
-DIR=""
+DIR="."
 i="0"
 ii="$#"
 while test "$i" -lt "$ii"; do
