@@ -10,8 +10,9 @@ Environment=DOCKER_COMPOSE=docker-compose
 
 ExecStartPre=/usr/bin/env "${DOCKER_COMPOSE}" pull
 ExecStartPre=/usr/bin/env "${DOCKER_COMPOSE}" build --pull
-ExecStart=/usr/bin/env -- bash -c 'set -m; trap "\\"$DOCKER_COMPOSE\\" up & kill -HUP %-" HUP; "$DOCKER_COMPOSE" up & while ! wait; do :; done'
+ExecStart=/bin/sh -c 'trap "\\"$DOCKER_COMPOSE\\" up -d" HUP; while :; do "$DOCKER_COMPOSE" up & while ! wait; do :; done; done'
 
+ExecStop=/usr/bin/env kill "${MAINPID}"
 ExecStop=/usr/bin/env "${DOCKER_COMPOSE}" stop
 
 ExecReload=/usr/bin/env "${DOCKER_COMPOSE}" pull
