@@ -14,7 +14,7 @@ case "$CMD" in
     fi;;
 esac
 
-DIR="."
+DIR=""
 i="0"
 ii="$#"
 while test "$i" -lt "$ii"; do
@@ -41,6 +41,10 @@ while test "$i" -lt "$ii"; do
   esac
   i="$((i+1))"
 done
+
+if test -z "$DIR"; then
+  DIR="."
+fi
 
 if test "$DIR"; then
   DIR="$(readlink -f -- "$DIR")"
