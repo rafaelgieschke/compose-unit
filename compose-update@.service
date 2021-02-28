@@ -3,4 +3,11 @@ Description=docker-compose update service "%f"
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/env systemctl reload compose@%i.service
+
+WorkingDirectory=%f
+Environment=COMPOSE_PROJECT_NAME=%i
+Environment=DOCKER_COMPOSE=docker-compose
+
+ExecStart=/usr/bin/env "${DOCKER_COMPOSE}" pull
+ExecStart=/usr/bin/env "${DOCKER_COMPOSE}" build --pull
+ExecStart=/usr/bin/env "${DOCKER_COMPOSE}" up --no-start

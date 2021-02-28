@@ -1,6 +1,9 @@
 [Unit]
 Description=docker-compose service "%f"
 Requires=compose-update@.timer
+Requires=compose-update@.service
+After=compose-update@.service
+
 
 [Service]
 WorkingDirectory=%f
@@ -8,16 +11,13 @@ Restart=always
 Environment=COMPOSE_PROJECT_NAME=%i
 Environment=DOCKER_COMPOSE=docker-compose
 
-ExecStartPre=/usr/bin/env "${DOCKER_COMPOSE}" pull
-ExecStartPre=/usr/bin/env "${DOCKER_COMPOSE}" build --pull
-ExecStart=/bin/sh -c 'trap "\\"$DOCKER_COMPOSE\\" up -d" HUP; while :; do "$DOCKER_COMPOSE" up & while ! wait; do :; done; done'
+ExecStart=/usr/bin/env "${DOCKER_COMPOSE}" up --abort-on-container-exit
 
-ExecStop=/usr/bin/env kill "${MAINPID}"
 ExecStop=/usr/bin/env "${DOCKER_COMPOSE}" stop
 
 ExecReload=/usr/bin/env "${DOCKER_COMPOSE}" pull
 ExecReload=/usr/bin/env "${DOCKER_COMPOSE}" build --pull
-ExecReload=/usr/bin/env kill -HUP "${MAINPID}"
+ExecReload=/usr/bin/env "${DOCKER_COMPOSE}" up --no-start
 
 [Install]
 WantedBy=multi-user.target
