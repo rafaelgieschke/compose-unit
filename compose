@@ -42,7 +42,7 @@ while test "$i" -lt "$ii"; do
   i="$((i+1))"
 done
 
-if test -z "$DIR"; then
+if test -z "$DIR" && test "$DIR" != "status" && test "$DIR" != "list-units"; then
   DIR="."
 fi
 
