@@ -46,7 +46,7 @@ if test -z "$DIR"; then
   DIR="."
 fi
 
-if test "$DIR"; then
+if test "$DIR" && test "$DIR" != "*"; then
   DIR="$(readlink -f -- "$DIR")"
   INSTANCE="$(systemd-escape -p "$DIR")"
 else
