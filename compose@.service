@@ -1,5 +1,5 @@
 [Unit]
-Description=docker-compose service "%f"
+Description=docker-compose "%f"
 Requires=compose-update@.timer
 
 [Service]
