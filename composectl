@@ -63,7 +63,7 @@ done
 if test "$CMD" = "docker"; then
   cd "$DIR"
   set -x
-  COMPOSE_PROJECT_NAME="$INSTANCE" exec "$DOCKER_COMPOSE" "$@"
+  COMPOSE_PROJECT_NAME="$(printf %s "$INSTANCE" | tr . _)" exec "$DOCKER_COMPOSE" "$@"
 elif test "$CMD" = "journalctl"; then
   set -x
   exec journalctl -u compose@"$INSTANCE" "$@"

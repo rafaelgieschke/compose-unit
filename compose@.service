@@ -10,7 +10,7 @@ Environment=DOCKER_COMPOSE=docker-compose
 
 ExecStartPre=/usr/bin/env "${DOCKER_COMPOSE}" pull
 ExecStartPre=/usr/bin/env "${DOCKER_COMPOSE}" build --pull
-ExecStart=/bin/sh -c 'trap "\\"$DOCKER_COMPOSE\\" up -d" HUP; while :; do "$DOCKER_COMPOSE" up & while ! wait; do :; done; done'
+ExecStart=/bin/sh -c 'COMPOSE_PROJECT_NAME="$(printf %%s "$COMPOSE_PROJECT_NAME" | tr . _)"; trap "\\"$DOCKER_COMPOSE\\" up -d" HUP; while :; do "$DOCKER_COMPOSE" up & while ! wait; do :; done; done'
 
 ExecStop=/usr/bin/env kill "${MAINPID}"
 ExecStop=/usr/bin/env "${DOCKER_COMPOSE}" stop
