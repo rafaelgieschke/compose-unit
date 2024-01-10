@@ -48,6 +48,10 @@ fi
 
 if test "$DIR" && test "$DIR" != "*"; then
   DIR="$(readlink -f -- "$DIR")"
+  if ! test -d "$DIR"; then
+    printf 'Error: Directory "%s" does not exit\n' "$DIR" >&2
+    exit 1
+  fi
   INSTANCE="$(systemd-escape -p "$DIR")"
 else
   INSTANCE="*"
