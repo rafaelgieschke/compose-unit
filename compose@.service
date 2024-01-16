@@ -5,6 +5,7 @@ Requires=compose-update@.timer
 [Service]
 WorkingDirectory=%f
 Restart=always
+RestartSec=60
 Environment=COMPOSE_PROJECT_NAME=%i
 Environment=DOCKER_COMPOSE=docker-compose
 
