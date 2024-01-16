@@ -64,6 +64,10 @@ for cmd in config exec images ps top; do
   fi
 done
 
+if test "$CMD" = "journal"; then
+  CMD="journalctl"
+fi
+
 if test "$CMD" = "docker"; then
   cd "$DIR"
   set -x
