@@ -8,16 +8,19 @@ Restart=always
 RestartSec=60
 Environment=COMPOSE_PROJECT_NAME=%i
 Environment=DOCKER_COMPOSE=docker-compose
+Environment=PREPROCESS='\
+  COMPOSE_PROJECT_NAME="$(printf %%s "$COMPOSE_PROJECT_NAME" | tr A-Z a-z | tr -c a-z0-9- _)" exec "$0" "$@"'
 
-ExecStartPre=/bin/sh -c 'COMPOSE_PROJECT_NAME="$(printf %%s "$COMPOSE_PROJECT_NAME" | tr A-Z a-z | tr -c a-z0-9- _)" exec "$0" "$@"' "${DOCKER_COMPOSE}" pull
-ExecStartPre=/bin/sh -c 'COMPOSE_PROJECT_NAME="$(printf %%s "$COMPOSE_PROJECT_NAME" | tr A-Z a-z | tr -c a-z0-9- _)" exec "$0" "$@"' "${DOCKER_COMPOSE}" build --pull
-ExecStart=/bin/sh -c 'COMPOSE_PROJECT_NAME="$(printf %%s "$COMPOSE_PROJECT_NAME" | tr A-Z a-z | tr -c a-z0-9- _)"; trap "\\"$DOCKER_COMPOSE\\" up -d" HUP; while :; do "$DOCKER_COMPOSE" up & while ! wait; do :; done; done'
+ExecStartPre=/bin/sh -c "${PREPROCESS}" "${DOCKER_COMPOSE}" pull
+ExecStartPre=/bin/sh -c "${PREPROCESS}" "${DOCKER_COMPOSE}" build --pull
+ExecStart=/bin/sh -c "${PREPROCESS}" sh -c \
+  'trap "\\"$DOCKER_COMPOSE\\" up -d" HUP; while :; do "$DOCKER_COMPOSE" up & while ! wait; do :; done; done'
 
 ExecStop=/usr/bin/env kill "${MAINPID}"
-ExecStop=/bin/sh -c 'COMPOSE_PROJECT_NAME="$(printf %%s "$COMPOSE_PROJECT_NAME" | tr A-Z a-z | tr -c a-z0-9- _)" exec "$0" "$@"' "${DOCKER_COMPOSE}" down
+ExecStop=/bin/sh -c "${PREPROCESS}" "${DOCKER_COMPOSE}" down
 
-ExecReload=/bin/sh -c 'COMPOSE_PROJECT_NAME="$(printf %%s "$COMPOSE_PROJECT_NAME" | tr A-Z a-z | tr -c a-z0-9- _)" exec "$0" "$@"' "${DOCKER_COMPOSE}" pull
-ExecReload=/bin/sh -c 'COMPOSE_PROJECT_NAME="$(printf %%s "$COMPOSE_PROJECT_NAME" | tr A-Z a-z | tr -c a-z0-9- _)" exec "$0" "$@"' "${DOCKER_COMPOSE}" build --pull
+ExecReload=/bin/sh -c "${PREPROCESS}" "${DOCKER_COMPOSE}" pull
+ExecReload=/bin/sh -c "${PREPROCESS}" "${DOCKER_COMPOSE}" build --pull
 ExecReload=/usr/bin/env kill -HUP "${MAINPID}"
 
 [Install]
