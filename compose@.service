@@ -8,7 +8,7 @@ Restart=always
 RestartSec=60
 Environment=COMPOSE_PROJECT_NAME=%i
 Environment=DOCKER_COMPOSE=docker-compose
-Environment=PREPROCESS='\
+Environment='PREPROCESS=\
   COMPOSE_PROJECT_NAME="$(printf %%s "$COMPOSE_PROJECT_NAME" | tr A-Z a-z | tr -c a-z0-9- _)" exec "$0" "$@"'
 
 ExecStartPre=/bin/sh -c "${PREPROCESS}" "${DOCKER_COMPOSE}" pull
