@@ -4,14 +4,13 @@ set -xeu
 cd "$(dirname "$0")"
 
 cp "compose@.service" "compose-update@.timer" "compose-update@.service" /etc/systemd/system/
-DOCKER_COMPOSE="$(which docker-compose)"
+DOCKER_COMPOSE="$(which docker-compose || :)"
 DOCKER_COMPOSE_ARGUMENTS=
 if ! test "$DOCKER_COMPOSE"; then
   DOCKER_COMPOSE="$(which docker)"
   DOCKER_COMPOSE_ARGUMENTS=compose
 fi
 "$DOCKER_COMPOSE" $DOCKER_COMPOSE_ARGUMENTS version
-printf 'Using Docker Compose command: %s %s\n' "$DOCKER_COMPOSE" "$DOCKER_COMPOSE_ARGUMENTS"
 sed -i "/^Environment=DOCKER_COMPOSE=/aEnvironment=DOCKER_COMPOSE=$DOCKER_COMPOSE" "/etc/systemd/system/compose@.service"
 sed -i "/^Environment=DOCKER_COMPOSE_ARGUMENTS=/aEnvironment=DOCKER_COMPOSE_ARGUMENTS=$DOCKER_COMPOSE_ARGUMENTS" "/etc/systemd/system/compose@.service"
 
